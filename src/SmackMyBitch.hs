@@ -13,7 +13,6 @@ import LoadEnv
 import System.Environment
 import System.Random (randomRIO)
 import System.Process (readProcess)
-import System.Exit
 import Control.Applicative
 import qualified Data.ByteString as B
 import qualified Data.ByteString.UTF8 as BU
