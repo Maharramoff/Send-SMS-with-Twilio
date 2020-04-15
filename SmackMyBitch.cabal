@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6d50960568cd3542e3309f0244da0330b6cb454879a07cb6d6ff8c8ddb497943
+-- hash: 0694ba635507bdf6a999487ee51caaca500ca4b5a4582a2e21263835885b18da
 
 name:           SmackMyBitch
 version:        0.1.0.0
@@ -27,7 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      SmackMyBitch
   other-modules:
       Paths_SmackMyBitch
   hs-source-dirs:
