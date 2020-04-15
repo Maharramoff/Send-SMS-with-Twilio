@@ -27,13 +27,13 @@ main = do
   loadEnv
   sid <- getEnvBS "TWILIO_ACCOUNT_SID"
   token <- getEnvBS "TWILIO_AUTH_TOKEN"
-  x <- pick ["Late at work. Working hard", "Late at work. Gotta ship this feature", "Late at work. Someone fucked up the system again"]
+  myNumber <- getEnvBS "MY_NUMBER"
+  herNumber <- getEnvBS "HER_NUMBER"
   manager <- newManager tlsManagerSettings
-  let yourNumber = "+12052728785"
-  let herNumber = "+994518010000"
-  let body = [("Body", x), ("From", yourNumber), ("To", herNumber)]
+  msgBody <- pick ["Late at work. Working hard", "Late at work. Gotta ship this feature", "Late at work. Someone fucked up the system again"]
+  let body = [("Body", msgBody), ("From", myNumber), ("To", herNumber)]
   let url = "https://api.twilio.com/2010-04-01/Accounts/" ++ BU.toString sid ++ "/Messages.json"
-  initialRequest <- parseUrlThrow url
+  initialRequest <- parseRequest url
   let request = applyBasicAuth sid token $ urlEncodedBody body $ initialRequest {method = "POST"}
   response <- httpLbs request manager
   putStrLn $ "Response status: " ++ show (statusCode $ responseStatus response)
