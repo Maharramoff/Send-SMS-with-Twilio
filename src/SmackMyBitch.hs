@@ -12,11 +12,14 @@ import Network.HTTP.Types.Status (statusCode)
 import LoadEnv
 import System.Environment
 import System.Random (randomRIO)
+import System.Process (readProcess)
+import System.Exit
 import Control.Applicative
 import qualified Data.ByteString as B
 import qualified Data.ByteString.UTF8 as BU
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
+import Control.Monad (when)
 
 
 getEnvBS :: String -> IO B.ByteString
@@ -33,16 +36,19 @@ apiResponse code
 sendMsg :: IO ()
 sendMsg = do
   loadEnv
-  sid <- getEnvBS "TWILIO_ACCOUNT_SID"
-  token <- getEnvBS "TWILIO_AUTH_TOKEN"
-  myNumber <- getEnvBS "MY_NUMBER"
-  herNumber <- getEnvBS "HER_NUMBER"
-  manager <- newManager tlsManagerSettings
-  msgBody <- pickRandomMsg ["Working hard", "Gotta ship this feature", "Someone fucked up the system again"]
-  let msgPrefix = "Late at work. "
-  let body = [("Body", msgPrefix <> msgBody), ("From", myNumber), ("To", herNumber)]
-  let url = "https://api.twilio.com/2010-04-01/Accounts/" ++ BU.toString sid ++ "/Messages.json"
-  initialRequest <- parseRequest url
-  let request = applyBasicAuth sid token $ urlEncodedBody body $ initialRequest {method = "POST"}
-  response <- httpLbs request manager
-  print (apiResponse (statusCode $ responseStatus response))
+  user <- getEnvBS "USER"
+  stdout <- readProcess "whoami" [] []
+  when (user `B.isInfixOf` BU.fromString stdout) $ do
+    sid <- getEnvBS "TWILIO_ACCOUNT_SID"
+    token <- getEnvBS "TWILIO_AUTH_TOKEN"
+    myNumber <- getEnvBS "MY_NUMBER"
+    herNumber <- getEnvBS "HER_NUMBER"
+    manager <- newManager tlsManagerSettings
+    msgBody <- pickRandomMsg ["Working hard", "Gotta ship this feature", "Someone fucked up the system again"]
+    let msgPrefix = "Late at work. "
+    let body = [("Body", msgPrefix <> msgBody), ("From", myNumber), ("To", herNumber)]
+    let url = "https://api.twilio.com/2010-04-01/Accounts/" ++ BU.toString sid ++ "/Messages.json"
+    initialRequest <- parseRequest url
+    let request = applyBasicAuth sid token $ urlEncodedBody body $ initialRequest {method = "POST"}
+    response <- httpLbs request manager
+    print (apiResponse (statusCode $ responseStatus response))

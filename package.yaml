@@ -29,6 +29,7 @@ dependencies:
 - text
 - load-env
 - random
+- process
 
 library:
   source-dirs: src
