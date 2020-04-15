@@ -20,8 +20,8 @@ import qualified Data.Text.Encoding as T
 getEnvBS :: String -> IO B.ByteString
 getEnvBS = fmap (T.encodeUtf8 . T.pack) . getEnv
 
-pick :: [a] -> IO a
-pick xs = (xs !!) Control.Applicative.<$> randomRIO (0, Prelude.length xs - 1)
+pickRandomMsg :: [msg] -> IO msg
+pickRandomMsg msg = (msg !!) Control.Applicative.<$> randomRIO (0, Prelude.length msg - 1)
 
 apiResponse :: Int -> String
 apiResponse code
@@ -36,7 +36,7 @@ main = do
   myNumber <- getEnvBS "MY_NUMBER"
   herNumber <- getEnvBS "HER_NUMBER"
   manager <- newManager tlsManagerSettings
-  msgBody <- pick ["Working hard", "Gotta ship this feature", "Someone fucked up the system again"]
+  msgBody <- pickRandomMsg ["Working hard", "Gotta ship this feature", "Someone fucked up the system again"]
   let msgPrefix = "Late at work. "
   let body = [("Body", msgPrefix <> msgBody), ("From", myNumber), ("To", herNumber)]
   let url = "https://api.twilio.com/2010-04-01/Accounts/" ++ BU.toString sid ++ "/Messages.json"
