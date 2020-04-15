@@ -36,13 +36,9 @@ main = do
   myNumber <- getEnvBS "MY_NUMBER"
   herNumber <- getEnvBS "HER_NUMBER"
   manager <- newManager tlsManagerSettings
-  msgBody <-
-    pick
-      [ "Late at work. Working hard"
-      , "Late at work. Gotta ship this feature"
-      , "Late at work. Someone fucked up the system again"
-      ]
-  let body = [("Body", msgBody), ("From", myNumber), ("To", herNumber)]
+  msgBody <- pick ["Working hard", "Gotta ship this feature", "Someone fucked up the system again"]
+  let msgPrefix = "Late at work. "
+  let body = [("Body", msgPrefix <> msgBody), ("From", myNumber), ("To", herNumber)]
   let url = "https://api.twilio.com/2010-04-01/Accounts/" ++ BU.toString sid ++ "/Messages.json"
   initialRequest <- parseRequest url
   let request = applyBasicAuth sid token $ urlEncodedBody body $ initialRequest {method = "POST"}
