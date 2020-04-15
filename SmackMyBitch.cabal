@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 498ba96f55ebf832f464c33ad47208dc364db4949ed20c5bf0b8d4dd03859af2
+-- hash: 6d50960568cd3542e3309f0244da0330b6cb454879a07cb6d6ff8c8ddb497943
 
 name:           SmackMyBitch
 version:        0.1.0.0
@@ -39,6 +39,7 @@ library
     , http-client-tls
     , http-types
     , load-env
+    , random
     , text
     , utf8-string
   default-language: Haskell2010
@@ -58,6 +59,7 @@ executable SmackMyBitch-exe
     , http-client-tls
     , http-types
     , load-env
+    , random
     , text
     , utf8-string
   default-language: Haskell2010
@@ -78,6 +80,7 @@ test-suite SmackMyBitch-test
     , http-client-tls
     , http-types
     , load-env
+    , random
     , text
     , utf8-string
   default-language: Haskell2010

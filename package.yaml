@@ -28,6 +28,7 @@ dependencies:
 - utf8-string
 - text
 - load-env
+- random
 
 library:
   source-dirs: src
